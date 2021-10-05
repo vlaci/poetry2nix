@@ -345,6 +345,14 @@ self: super:
     }
   );
 
+  filelock = super.filelock.overridePythonAttrs (
+    old: {
+      postPatch = ''
+        substituteInPlace setup.py --replace 'setup()' 'setup(version="${old.version}")'
+      '';
+    }
+  );
+
   fiona = super.fiona.overridePythonAttrs (
     old: {
       buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.gdal_2 ];
